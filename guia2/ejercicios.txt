@@ -1,0 +1,159 @@
+%ejercicio1 Guia 2
+concatenar([],L,L).
+
+concatenar([X|Xs],L,[X|R]) :-
+    			concatenar(Xs,L,R).
+
+prefijo([],_L).
+prefijo([X|Xs],[X|Ys]) :-
+    	 	prefijo(Xs,Ys).
+
+sufijo(L,L).
+sufijo([X|Xs],[_Y|Ys]) :-
+    		sufijo([X|Xs],Ys).
+
+sublista([],_L).
+sublista([X|Xs],[Y|Ys]) :-
+    		sufijo(Sufijo,[Y|Ys]),
+    		prefijo([X|Xs], Sufijo).
+
+ultimo(X,[X]).
+ultimo(X, [_Y|Ys]) :-
+    	ultimo(X,Ys).
+
+miembro(Elemento,[Elemento|_]).
+miembro(Elemento,[_Y|Ys]) :-
+    	miembro(Elemento,Ys).
+
+adyacente(X,Y,[X,Y|_]).
+adyacente(X,Y,[_Z|Zs]) :-
+    	adyacente(X,Y,Zs).
+
+selecciona([E|Es],E,Es).
+selecciona([X|Xs], Elemento, [Y|Ys]) :-
+    		append([X],S,[Y|Ys]),
+    		selecciona(Xs,Elemento,S),!.
+
+ultimaPos(E,[E|[]]).
+ultimaPos(E,[_X|Xs]) :-
+    		ultimaPos(E,Xs).
+
+
+
+reverse([],[]).
+reverse([X|Xs],Zs) :-
+    		append(R,[X],Zs),
+    		reverse(Xs,R).
+
+longitud([],0).
+longitud([_X|Xs],L) :-
+    	longitud(Xs,R),
+    	L is R+1.
+
+
+ %permuta(Lista, Permuta): evalua verdadero 
+ %si Permuta corresponde a una permutacion de Lista. 
+
+permuta([],[]).
+permuta([X|Xs],[Y|Ys]) :-
+    		selecciona([Y|Ys],X,L),
+    		permuta(Xs,L).
+
+
+%----------------------------------------------------------------
+
+ % Ejercicio 2
+ %Miembro en listas anidadas
+
+ %Definir el predicado ocurre(Elemento, Lista) que debera evaluar verdadero cuando Elemento ocurra en cualquier lugar de Lista. 
+ %Tener en cuenta que Lista puede contener listas(cualquier nivel de anidamiento).
+
+ %member(a,[a,b,c])
+lista([]).
+lista([_X|Xs]) :-
+    	lista(Xs).
+
+ocurre(E,[E|_]).
+ocurre(Elemento,[X|_Xs]):-
+    	lista(X),
+    	ocurre(Elemento,X),!.
+
+ocurre(Elemento,[_X|Xs]):-
+    	ocurre(Elemento,Xs).
+
+
+%----------------------------------------------------------------
+
+% Ejercicio 3
+%  Lista de elementos atomicos
+
+listaAtomos([],[]).
+listaAtomos([X|Xs],[Y|Ys]) :-
+    		not(lista(X)),
+    		Y = X,
+    		listaAtomos(Xs,Ys).
+
+listaAtomos([X|Xs],[Y|Ys]) :-
+    		lista(X),
+    		listaAtomos(X,R),
+    		listaAtomos(Xs,Rs),
+    		append(R,Rs,[Y|Ys]).
+
+%----------------------------------------------------------------
+
+
+%----------------------------------------------------------------
+
+% Ejercicio 4
+%  Subsecuencia(Secuencia,Sub)
+iguales(X,X).
+subSecuencia([],[]).
+subSecuencia(X,[]) :- lista(X).
+subSecuencia([X|Xs],[X|Ys]) :-
+    	subSecuencia(Xs,Ys).
+subSecuencia([X|Xs],[Y|Ys]) :-
+    	not(iguales(X,Y)),
+    	subSecuencia(Xs,[Y|Ys]).
+
+%----------------------------------------------------------------
+
+%----------------------------------------------------------------
+
+% Ejercicio 5
+%  Predicados con ARBOLES BINARIOS
+% a) arbolBinario(Arbol): 
+% 	 evalua verdadero si el argumento es un arbol binario
+
+arbolBinario(nil).
+arbolBinario(arbol(_Raiz,AI,AD)) :-
+    	arbolBinario(AI),
+    	arbolBinario(AD).
+
+% b) miembroArbol(Valor, Arbol): 
+% evalua verdadero si Valor se encuentra almacenado en un nodo
+miembroArbol(Valor,arbol(Valor,_,_)).
+miembroArbol(Valor,arbol(_Raiz,AI,_AD)) :-
+    		miembroArbol(Valor,AI).
+miembroArbol(Valor,arbol(_Raiz,_AI,AD)) :-
+    		miembroArbol(Valor,AD).
+
+% listaHojas(Arbol, Hojas): 
+% se satisface si la lista Hojas contiene
+% los valores almacenados en las hojas de Arbol.
+
+listaHojas(arbol(Raiz,nil,nil),[Raiz]).
+
+listaHojas(arbol(_Raiz,AI,AD),[X|Xs]) :-
+    		listaHojas(AI,LI),
+    		listaHojas(AD,LD),
+    		append(LI,LD,[X|Xs]).
+
+listaHojas(arbol(_Raiz,AI,nil), Lista) :-
+    		listaHojas(AI,Lista).
+
+listaHojas(arbol(_Raiz,nil,AD), Lista) :-
+    		listaHojas(AD,Lista).
+    	
+
+%----------------------------------------------------------------
+

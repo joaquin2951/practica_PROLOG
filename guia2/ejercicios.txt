@@ -44,12 +44,12 @@ reverse([],[]).
 reverse([X|Xs],Zs) :-
     		append(R,[X],Zs),
     		reverse(Xs,R).
-
+/*
 longitud([],0).
 longitud([_X|Xs],L) :-
     	longitud(Xs,R),
     	L is R+1.
-
+*/
 
  %permuta(Lista, Permuta): evalua verdadero 
  %si Permuta corresponde a una permutacion de Lista. 
@@ -137,7 +137,7 @@ miembroArbol(Valor,arbol(_Raiz,AI,_AD)) :-
 miembroArbol(Valor,arbol(_Raiz,_AI,AD)) :-
     		miembroArbol(Valor,AD).
 
-% listaHojas(Arbol, Hojas): 
+% c) listaHojas(Arbol, Hojas): 
 % se satisface si la lista Hojas contiene
 % los valores almacenados en las hojas de Arbol.
 
@@ -153,7 +153,132 @@ listaHojas(arbol(_Raiz,AI,nil), Lista) :-
 
 listaHojas(arbol(_Raiz,nil,AD), Lista) :-
     		listaHojas(AD,Lista).
+
+
+% d) preorden(Arbol, Lista): 
+% evalua verdadero si el segundo argumento es una lista que contiene
+% los valores de los nodos del arbol binario Arbol segun recorrido preorden.
+%[RAIZ AI AD]
+preorden(arbol(Raiz,nil,nil),[Raiz]).
+preorden(arbol(Raiz,AI,nil),[X|Xs]) :-
+    		preorden(AI,LI),	
+    		append([Raiz],LI,[X|Xs]).
+preorden(arbol(Raiz,nil,AD),[X|Xs]) :-
+    		preorden(AD,LD),
+    		append([Raiz],LD,[X|Xs]).
+preorden(arbol(Raiz,AI,AD),[X|Xs])	:-
+    		preorden(AI,LI),
+    		append([Raiz],LI,RLI),
+    		preorden(AD,LD),
+    		append(RLI,LD,[X|Xs]).
+
+% e) inorden(Arbol, Lista): ıdem anterior pero segun recorrido inorden.
+%[AI RAIZ AD]
+inorden(arbol(Raiz,nil,nil),[Raiz]).
+inorden(arbol(Raiz,AI,nil),[X|Xs]) :-
+    		inorden(AI,LI),	
+    		append(LI,[Raiz],[X|Xs]).
+inorden(arbol(Raiz,nil,AD),[X|Xs]) :-
+    		inorden(AD,LD),
+    		append([Raiz],LD,[X|Xs]).
+inorden(arbol(Raiz,AI,AD),[X|Xs])	:-
+    		inorden(AI,LI),
+    		append(LI,[Raiz],LIR),
+    		inorden(AD,LD),
+    		append(LIR,LD,[X|Xs]).
+
+% f) posorden(Arbol, Lista): ıdem anterior pero segun recorrido posorden
+%[AI AD RAIZ]
+posorden(arbol(Raiz,nil,nil),[Raiz]).
+posorden(arbol(Raiz,AI,nil),[X|Xs]) :-
+    		posorden(AI,LI),	
+    		append(LI,[Raiz],[X|Xs]).
+posorden(arbol(Raiz,nil,AD),[X|Xs]) :-
+    		posorden(AD,LD),
+    		append(LD,[Raiz],[X|Xs]).
+posorden(arbol(Raiz,AI,AD),[X|Xs])	:-
+    		posorden(AI,LI),
+    		posorden(AD,LD),
+    		append(LI,LD,LILD),
+    		append(LILD,[Raiz],[X|Xs]).
+
+%CONSULTA PARA PROBAR ESTOS RECORRIDOS:
+/*
+ posorden( arbol(1,
+ arbol(2, nil, arbol(4, nil, nil)),
+ arbol(3, arbol(5, arbol(7, nil, nil), nil),
+ arbol(6, nil, nil))),LISTA),
+
+ posorden(arbol(9, 
+            arbol(2,arbol(3,nil,nil),arbol(4,arbol(5,nil,nil),arbol(7,nil,nil))),
+            arbol(8,arbol(9,nil,nil),arbol(11,nil,nil))
+                 ), Resultado).
+*/
+
+
+%----------------------------------------------------------------
+
+
+%----------------------------------------------------------------
+
+%   PARTE  II
+% Ejercicio 6
+% Predicados relacionales y/o aritméticos con listas
+
+%  a) longitud(Lista, N): eval´ua verdadero si N es la longitud de Lista.
+
+longitud([],0).
+longitud([_X|Xs],L) :-
+    longitud(Xs,Ls),
+    L is (1 + Ls).
+
+
+%b) maximo(Lista, Max): se satisface si Max es el valor maximo de Lista.
+
+maximo([X],X).
+maximo([X|Xs],Maximo) :-
+    	maximo(Xs,Ms),
+    	X >= Ms,
+    	Maximo = X.
+maximo([X|Xs],Maximo) :-
+    	maximo(Xs,Ms),
+    	X < Ms,
+    	Maximo = Ms.
+
+% d) enesimo(Lista, N, Elemento):
+% evalua verdadero si Elemento se encuentra en la posicion N de Lista
+enesimo([X|_Xs],1,X).
+enesimo([_X|Xs],N,Elem) :-
+    	enesimo(Xs,Ns,Elem),
+    	N is Ns+1.
+
+% e) sumaLista(Lista, Suma): 
+% se satisface si Suma es la suma de los elementos de Lista
+sumaLista([],0).
+sumaLista([X|Xs],S) :-
+    	sumaLista(Xs,Ss),
+    	S is (Ss + X).
+
+% f) sinDuplicados(Lista, LSinDup):
+% se satisface si LSinDup unifica
+% con la lista resultante de quitar los elementos repetidos de Lista.
+
+sinDuplicados([],[]).
+sinDuplicados([X|Xs],R) :- 
+    	sinDuplicadosAux([X|Xs],[],R).
+
+sinDuplicadosAux([],Acc,R) :- 
+    	reverse(Acc,R).
+sinDuplicadosAux([X|Xs],Acc,R) :-
+    	member(X,Acc),
+    	sinDuplicadosAux(Xs,Acc,R).
     	
+sinDuplicadosAux([X|Xs], Acc, R) :-
+    	not(member(X, Acc)),
+    	sinDuplicadosAux(Xs, [X|Acc], R).
+    
+    
+    
 
 %----------------------------------------------------------------
 

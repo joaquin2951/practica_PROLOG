@@ -1,54 +1,54 @@
-%ejercicio1 Guia 2
+ %ejercicio1 Guia 2
 concatenar([],L,L).
 
 concatenar([X|Xs],L,[X|R]) :-
-    			concatenar(Xs,L,R).
+                concatenar(Xs,L,R).
 
 prefijo([],_L).
 prefijo([X|Xs],[X|Ys]) :-
-    	 	prefijo(Xs,Ys).
+            prefijo(Xs,Ys).
 
 sufijo(L,L).
 sufijo([X|Xs],[_Y|Ys]) :-
-    		sufijo([X|Xs],Ys).
+            sufijo([X|Xs],Ys).
 
 sublista([],_L).
 sublista([X|Xs],[Y|Ys]) :-
-    		sufijo(Sufijo,[Y|Ys]),
-    		prefijo([X|Xs], Sufijo).
+            sufijo(Sufijo,[Y|Ys]),
+            prefijo([X|Xs], Sufijo).
 
 ultimo(X,[X]).
 ultimo(X, [_Y|Ys]) :-
-    	ultimo(X,Ys).
+        ultimo(X,Ys).
 
 miembro(Elemento,[Elemento|_]).
 miembro(Elemento,[_Y|Ys]) :-
-    	miembro(Elemento,Ys).
+        miembro(Elemento,Ys).
 
 adyacente(X,Y,[X,Y|_]).
 adyacente(X,Y,[_Z|Zs]) :-
-    	adyacente(X,Y,Zs).
+        adyacente(X,Y,Zs).
 
 selecciona([E|Es],E,Es).
 selecciona([X|Xs], Elemento, [Y|Ys]) :-
-    		append([X],S,[Y|Ys]),
-    		selecciona(Xs,Elemento,S),!.
+            append([X],S,[Y|Ys]),
+            selecciona(Xs,Elemento,S),!.
 
 ultimaPos(E,[E|[]]).
 ultimaPos(E,[_X|Xs]) :-
-    		ultimaPos(E,Xs).
+            ultimaPos(E,Xs).
 
 
 
 reverse([],[]).
 reverse([X|Xs],Zs) :-
-    		append(R,[X],Zs),
-    		reverse(Xs,R).
+            append(R,[X],Zs),
+            reverse(Xs,R).
 /*
 longitud([],0).
 longitud([_X|Xs],L) :-
-    	longitud(Xs,R),
-    	L is R+1.
+        longitud(Xs,R),
+        L is R+1.
 */
 
  %permuta(Lista, Permuta): evalua verdadero 
@@ -56,8 +56,8 @@ longitud([_X|Xs],L) :-
 
 permuta([],[]).
 permuta([X|Xs],[Y|Ys]) :-
-    		selecciona([Y|Ys],X,L),
-    		permuta(Xs,L).
+            selecciona([Y|Ys],X,L),
+            permuta(Xs,L).
 
 
 %----------------------------------------------------------------
@@ -71,15 +71,15 @@ permuta([X|Xs],[Y|Ys]) :-
  %member(a,[a,b,c])
 lista([]).
 lista([_X|Xs]) :-
-    	lista(Xs).
+        lista(Xs).
 
 ocurre(E,[E|_]).
 ocurre(Elemento,[X|_Xs]):-
-    	lista(X),
-    	ocurre(Elemento,X),!.
+        lista(X),
+        ocurre(Elemento,X),!.
 
 ocurre(Elemento,[_X|Xs]):-
-    	ocurre(Elemento,Xs).
+        ocurre(Elemento,Xs).
 
 
 %----------------------------------------------------------------
@@ -89,15 +89,15 @@ ocurre(Elemento,[_X|Xs]):-
 
 listaAtomos([],[]).
 listaAtomos([X|Xs],[Y|Ys]) :-
-    		not(lista(X)),
-    		Y = X,
-    		listaAtomos(Xs,Ys).
+            not(lista(X)),
+            Y = X,
+            listaAtomos(Xs,Ys).
 
 listaAtomos([X|Xs],[Y|Ys]) :-
-    		lista(X),
-    		listaAtomos(X,R),
-    		listaAtomos(Xs,Rs),
-    		append(R,Rs,[Y|Ys]).
+            lista(X),
+            listaAtomos(X,R),
+            listaAtomos(Xs,Rs),
+            append(R,Rs,[Y|Ys]).
 
 %----------------------------------------------------------------
 
@@ -110,10 +110,10 @@ iguales(X,X).
 subSecuencia([],[]).
 subSecuencia(X,[]) :- lista(X).
 subSecuencia([X|Xs],[X|Ys]) :-
-    	subSecuencia(Xs,Ys).
+        subSecuencia(Xs,Ys).
 subSecuencia([X|Xs],[Y|Ys]) :-
-    	not(iguales(X,Y)),
-    	subSecuencia(Xs,[Y|Ys]).
+        not(iguales(X,Y)),
+        subSecuencia(Xs,[Y|Ys]).
 
 %----------------------------------------------------------------
 
@@ -122,20 +122,20 @@ subSecuencia([X|Xs],[Y|Ys]) :-
 % Ejercicio 5
 %  Predicados con ARBOLES BINARIOS
 % a) arbolBinario(Arbol): 
-% 	 evalua verdadero si el argumento es un arbol binario
+%    evalua verdadero si el argumento es un arbol binario
 
 arbolBinario(nil).
 arbolBinario(arbol(_Raiz,AI,AD)) :-
-    	arbolBinario(AI),
-    	arbolBinario(AD).
+        arbolBinario(AI),
+        arbolBinario(AD).
 
 % b) miembroArbol(Valor, Arbol): 
 % evalua verdadero si Valor se encuentra almacenado en un nodo
 miembroArbol(Valor,arbol(Valor,_,_)).
 miembroArbol(Valor,arbol(_Raiz,AI,_AD)) :-
-    		miembroArbol(Valor,AI).
+            miembroArbol(Valor,AI).
 miembroArbol(Valor,arbol(_Raiz,_AI,AD)) :-
-    		miembroArbol(Valor,AD).
+            miembroArbol(Valor,AD).
 
 % c) listaHojas(Arbol, Hojas): 
 % se satisface si la lista Hojas contiene
@@ -144,15 +144,15 @@ miembroArbol(Valor,arbol(_Raiz,_AI,AD)) :-
 listaHojas(arbol(Raiz,nil,nil),[Raiz]).
 
 listaHojas(arbol(_Raiz,AI,AD),[X|Xs]) :-
-    		listaHojas(AI,LI),
-    		listaHojas(AD,LD),
-    		append(LI,LD,[X|Xs]).
+            listaHojas(AI,LI),
+            listaHojas(AD,LD),
+            append(LI,LD,[X|Xs]).
 
 listaHojas(arbol(_Raiz,AI,nil), Lista) :-
-    		listaHojas(AI,Lista).
+            listaHojas(AI,Lista).
 
 listaHojas(arbol(_Raiz,nil,AD), Lista) :-
-    		listaHojas(AD,Lista).
+            listaHojas(AD,Lista).
 
 
 % d) preorden(Arbol, Lista): 
@@ -161,46 +161,46 @@ listaHojas(arbol(_Raiz,nil,AD), Lista) :-
 %[RAIZ AI AD]
 preorden(arbol(Raiz,nil,nil),[Raiz]).
 preorden(arbol(Raiz,AI,nil),[X|Xs]) :-
-    		preorden(AI,LI),	
-    		append([Raiz],LI,[X|Xs]).
+            preorden(AI,LI),    
+            append([Raiz],LI,[X|Xs]).
 preorden(arbol(Raiz,nil,AD),[X|Xs]) :-
-    		preorden(AD,LD),
-    		append([Raiz],LD,[X|Xs]).
-preorden(arbol(Raiz,AI,AD),[X|Xs])	:-
-    		preorden(AI,LI),
-    		append([Raiz],LI,RLI),
-    		preorden(AD,LD),
-    		append(RLI,LD,[X|Xs]).
+            preorden(AD,LD),
+            append([Raiz],LD,[X|Xs]).
+preorden(arbol(Raiz,AI,AD),[X|Xs])  :-
+            preorden(AI,LI),
+            append([Raiz],LI,RLI),
+            preorden(AD,LD),
+            append(RLI,LD,[X|Xs]).
 
 % e) inorden(Arbol, Lista): ıdem anterior pero segun recorrido inorden.
 %[AI RAIZ AD]
 inorden(arbol(Raiz,nil,nil),[Raiz]).
 inorden(arbol(Raiz,AI,nil),[X|Xs]) :-
-    		inorden(AI,LI),	
-    		append(LI,[Raiz],[X|Xs]).
+            inorden(AI,LI), 
+            append(LI,[Raiz],[X|Xs]).
 inorden(arbol(Raiz,nil,AD),[X|Xs]) :-
-    		inorden(AD,LD),
-    		append([Raiz],LD,[X|Xs]).
-inorden(arbol(Raiz,AI,AD),[X|Xs])	:-
-    		inorden(AI,LI),
-    		append(LI,[Raiz],LIR),
-    		inorden(AD,LD),
-    		append(LIR,LD,[X|Xs]).
+            inorden(AD,LD),
+            append([Raiz],LD,[X|Xs]).
+inorden(arbol(Raiz,AI,AD),[X|Xs])   :-
+            inorden(AI,LI),
+            append(LI,[Raiz],LIR),
+            inorden(AD,LD),
+            append(LIR,LD,[X|Xs]).
 
 % f) posorden(Arbol, Lista): ıdem anterior pero segun recorrido posorden
 %[AI AD RAIZ]
 posorden(arbol(Raiz,nil,nil),[Raiz]).
 posorden(arbol(Raiz,AI,nil),[X|Xs]) :-
-    		posorden(AI,LI),	
-    		append(LI,[Raiz],[X|Xs]).
+            posorden(AI,LI),    
+            append(LI,[Raiz],[X|Xs]).
 posorden(arbol(Raiz,nil,AD),[X|Xs]) :-
-    		posorden(AD,LD),
-    		append(LD,[Raiz],[X|Xs]).
-posorden(arbol(Raiz,AI,AD),[X|Xs])	:-
-    		posorden(AI,LI),
-    		posorden(AD,LD),
-    		append(LI,LD,LILD),
-    		append(LILD,[Raiz],[X|Xs]).
+            posorden(AD,LD),
+            append(LD,[Raiz],[X|Xs]).
+posorden(arbol(Raiz,AI,AD),[X|Xs])  :-
+            posorden(AI,LI),
+            posorden(AD,LD),
+            append(LI,LD,LILD),
+            append(LILD,[Raiz],[X|Xs]).
 
 %CONSULTA PARA PROBAR ESTOS RECORRIDOS:
 /*
@@ -237,27 +237,27 @@ longitud([_X|Xs],L) :-
 
 maximo([X],X).
 maximo([X|Xs],Maximo) :-
-    	maximo(Xs,Ms),
-    	X >= Ms,
-    	Maximo = X.
+        maximo(Xs,Ms),
+        X >= Ms,
+        Maximo = X.
 maximo([X|Xs],Maximo) :-
-    	maximo(Xs,Ms),
-    	X < Ms,
-    	Maximo = Ms.
+        maximo(Xs,Ms),
+        X < Ms,
+        Maximo = Ms.
 
 % d) enesimo(Lista, N, Elemento):
 % evalua verdadero si Elemento se encuentra en la posicion N de Lista
 enesimo([X|_Xs],1,X).
 enesimo([_X|Xs],N,Elem) :-
-    	enesimo(Xs,Ns,Elem),
-    	N is Ns+1.
+        enesimo(Xs,Ns,Elem),
+        N is Ns+1.
 
 % e) sumaLista(Lista, Suma): 
 % se satisface si Suma es la suma de los elementos de Lista
 sumaLista([],0).
 sumaLista([X|Xs],S) :-
-    	sumaLista(Xs,Ss),
-    	S is (Ss + X).
+        sumaLista(Xs,Ss),
+        S is (Ss + X).
 
 % f) sinDuplicados(Lista, LSinDup):
 % se satisface si LSinDup unifica
@@ -265,20 +265,145 @@ sumaLista([X|Xs],S) :-
 
 sinDuplicados([],[]).
 sinDuplicados([X|Xs],R) :- 
-    	sinDuplicadosAux([X|Xs],[],R).
+        sinDuplicadosAux([X|Xs],[],R).
 
 sinDuplicadosAux([],Acc,R) :- 
-    	reverse(Acc,R).
+        reverse(Acc,R).
 sinDuplicadosAux([X|Xs],Acc,R) :-
-    	member(X,Acc),
-    	sinDuplicadosAux(Xs,Acc,R).
-    	
+        member(X,Acc),
+        sinDuplicadosAux(Xs,Acc,R).
+        
 sinDuplicadosAux([X|Xs], Acc, R) :-
-    	not(member(X, Acc)),
-    	sinDuplicadosAux(Xs, [X|Acc], R).
+        not(member(X, Acc)),
+        sinDuplicadosAux(Xs, [X|Acc], R).
     
     
+%g) ordenada(Lista, LOrdenada): evalua verdadero si LOrdenada
+%contiene los mismos elementos de Lista pero ordenados ascendentemente.  
+menor([Elemento],Elemento).
+menor([X|Xs],Elemento) :-
+        menor(Xs,Es),
+        X =< Es,
+        Elemento = X.
+menor([X|Xs],Elemento) :-
+        menor(Xs,Es),
+        X > Es,
+        Elemento = Es.
+
+ordenada([],[]).
+ordenada([X|Xs],[Y|Ys]) :-
+        menor([X|Xs],Y),
+        append(Prefijo,[Y],PreY),
+        append(PreY,Sufijo,[X|Xs]),
+        append(Prefijo,Sufijo,PreSuf),!,
+        ordenada(PreSuf,Ys).
+        
+
+% i) elimina(Lista, Elemento, ListaR): evalua verdadero si el tercer argumento
+% es la lista resultante de eliminar todas las ocurrencias de Elemento en Lista.
+
+%elimina(L,E,_R) :- not(member(E,L)).
+/*
+elimina([X],X,[]).
+elimina(L,E,L) :- 
+        not(member(E,L)),!.
+elimina([X|Xs],Elemento,R):-
+        Elemento = X,
+        elimina(Xs,Elemento,S),
+        R = S.
+elimina([X|Xs],Elemento,[Y|Ys]):-
+        not(Elemento = X),
+        Y = X,
+        elimina(Xs,Elemento,Ys).
+*/
+
+
+%OTRA SOLUCION
+elimina([],_,[]).
+elimina([X|Xs],X,R) :-
+        elimina(Xs,X,R).
     
+elimina([X|Xs],E,[X|Ys]) :-
+        E \= X,
+        elimina(Xs,E,Ys).
+
+
+    
+
+%----------------------------------------------------------------
+
+
+%----------------------------------------------------------------
+
+% Ejercicio 7
+%  Predicados relaciones y/o aritmeticos con arboles binarios
+
+% Definir los siguiente predicados:
+%a) profundidad(Arbol, N): evalua verdadero si N es la profundidad de Arbol.
+
+%arbol(Raiz,AI,AD)
+%arbolBinario(Raiz,nil,nil).
+
+mayor(X,Y,X) :-
+        X >= Y.
+mayor(X,Y,Y) :-
+        X < Y.
+
+profundidad(arbol(_Raiz,nil,nil),0).
+profundidad(arbol(_Raiz,AI,nil),P):-
+        profundidad(AI,R),
+        P is ( R + 1 ).
+profundidad(arbol(_Raiz,nil,AD),P):-
+        profundidad(AD,R),
+        P is ( R + 1 ).
+profundidad(arbol(_,AI,AD),P):-
+        profundidad(AI,PI),
+        profundidad(AD,PD),
+        mayor(PI,PD,M),
+        P is ( M + 1 ).
+/*
+ Arbol = arbol(1,
+ arbol(2, nil, arbol(4, nil, nil)),
+ arbol(3, arbol(5, arbol(7, nil, nil), nil),
+ arbol(6, nil, nil)))
+*/
+
+%b) sumaNodos(Arbol, Suma): evalua verdadero si
+%el segundo argumento es la suma de los valores almacenados en los nodos de Arbol.
+
+sumaNodos(arbol(Raiz,nil,nil),Raiz).
+sumaNodos(arbol(Raiz,AI,nil),Suma):-
+        sumaNodos(AI,SI),
+        Suma is (SI + Raiz).
+sumaNodos(arbol(Raiz,nil,AD),Suma):-
+        sumaNodos(AD,SD),
+        Suma is (Raiz + SD).
+sumaNodos(arbol(Raiz,AI,AD),Suma):-
+        sumaNodos(AD,SD),
+        sumaNodos(AI,SI),
+        Suma is (Raiz + SI + SD).
+
+
+% c) cantidadHojas(Arbol, Suma): evalua verdadero si el segundo argumento
+% corresponde a la cantidad de hojas de Arbol.
+
+cantidadHojas(arbol(_,nil,nil),1).
+cantidadHojas(arbol(_,AI,nil),Cantidad):-
+        cantidadHojas(AI,Cantidad).
+cantidadHojas(arbol(_,nil,AD),Cantidad):-
+        cantidadHojas(AD,Cantidad).
+cantidadHojas(arbol(_,AI,AD),Cantidad):-
+        cantidadHojas(AD,CD),
+        cantidadHojas(AI,CI),
+        Cantidad is (CI + CD).
+
+/*
+ CONSULTA
+ cantidadHojas(arbol(1,
+ arbol(2, nil, arbol(4, nil, nil)),
+ arbol(3, arbol(5, arbol(7, nil, nil), nil),
+ arbol(6, nil, nil))), 3)
+*/
 
 %----------------------------------------------------------------
 

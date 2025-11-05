@@ -1,0 +1,14 @@
+%----------------------------------------------------------------
+
+%   LISTAS
+% Ejercicio 1
+% Reconocimiento de patrones
+
+% Se le solicita que defina el predicado identifica(Datos, Secuencia),
+% el primer argumento es la secuencia de datos (una lista)
+% y el segundo corresponde al sımbolo que caracteriza la secuencia
+
+
+    
+
+%----------------------------------------------------------------

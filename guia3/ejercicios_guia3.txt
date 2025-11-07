@@ -8,7 +8,193 @@
 % el primer argumento es la secuencia de datos (una lista)
 % y el segundo corresponde al sımbolo que caracteriza la secuencia
 
+menorDeLista(X,[X]).
+menorDeLista(X,[X|Ys]):-
+    menorDeLista(E,Ys),
+    X < E.
+menorDeLista(E,[X|Xs]):-
+    menorDeLista(E,Xs),
+    X > E.
 
-    
+mayorDeLista(X,[X]).
+mayorDeLista(X,[X|Ys]):-
+    mayorDeLista(E,Ys),
+    X > E.
+mayorDeLista(E,[X|Xs]):-
+    mayorDeLista(E,Xs),
+    X < E.
+
+creciente([X,Y]) :-
+    menorDeLista(X,[X,Y]).
+creciente([X|Xs]):-
+    menorDeLista(X,[X|Xs]),
+    creciente(Xs).
+
+decreciente([X,Y]):-
+    mayorDeLista(X,[X,Y]).
+decreciente([X|Xs]):-
+    mayorDeLista(X,[X|Xs]),
+    decreciente(Xs).
+
+constante([X,X]).
+constante([X,Y|Ys]):-
+    	X is Y,
+    	constante([Y|Ys]).
+
+
+
+identifica(ListaDatos, TipoSecuencia):-
+    append(C,D,ListaDatos),
+    creciente(C),
+    decreciente(D),!,
+    TipoSecuencia = maximo.
+
+identifica(ListaDatos, TipoSecuencia):-
+    append(D,C,ListaDatos),
+    decreciente(D),
+    creciente(C),!,
+    TipoSecuencia = minimo.
+
+identifica(ListaDatos, TipoSecuencia):-
+    append(CM,D,ListaDatos),
+    append(C,M,CM),
+    creciente(C),
+    constante(M),
+    decreciente(D),!,
+    TipoSecuencia = meseta.
+
+
+identifica(_,TipoSecuencia) :-
+    TipoSecuencia = sinorden.
+
+
+/*
+  Ejemplos:
+ ?- identifica([1, 3, 4, 10, 99, 98, 23, 2], Z).
+ Z = maximo
+ ?- identifica([34, 3, 6, 99, 100], Z).
+ Z = minimo
+ ?- identifica([34, 35, 67, 67, 67, 30, 21], meseta).
+ true
+ ?- identifica([23, 45, 46, 2, 1, 4], sinorden).
+ true
+*/
 
 %----------------------------------------------------------------
+
+%----------------------------------------------------------------
+
+%   LISTAS
+% Ejercicio 2
+% Palindromos
+
+% Definir en Prolog el predicado palindromos(Lista, LPalindromos) 
+%que evalua verdadero si LPalindromos es una lista que
+%contiene todos los palindromos que pueden obtenerse a partir de los elementos
+%de Lista.
+/*
+ Ejemplos:
+ ?- palindromos([1, 2, 0, 0, 2], L).
+ L = [[2, 0, 1, 0, 2], [0, 2, 1, 2, 0]]
+ ?- palindromos([0, 1, 1, 1, 2, 2], []).
+ true
+ ?- palindromos([b, a, a, b, c, c], L).
+ L = [[b, a, c, c, a, b], [b, c, a, a, c, b], [a, b, c, c, b, a], [a, c, b, b, c ,a],
+ [c, b, a, a, b, c], [c, a, b, b, a, c]]
+ */
+
+/*reversa(ListaOriginal,ListaReversa)*/
+reversa([X],[X]).
+reversa([X|Xs],[Y|Ys]):-
+    	reversa(Xs,R),
+    	append(R,[X],[Y|Ys]).
+
+%Lista de Permutaciones LP de una lista de elementos L
+selecciona([E|Es],E,Es).
+selecciona([X|Xs], Elemento, [Y|Ys]) :-
+            append([X],S,[Y|Ys]),
+            selecciona(Xs,Elemento,S),!.
+
+permuta([],[]).
+permuta([X|Xs],[Y|Ys]) :-
+            selecciona([Y|Ys],X,L),
+            permuta(Xs,L).
+
+permutaciones(L,LP):-
+    	permutacionesAux(L,LP,[]).
+
+
+permutacionesAux(ListaNumeros,[Per|Pers],Aux):-
+    	permuta(ListaNumeros,P),
+    	not(member(P,Aux)),!,
+    	Per = P,
+    	append(Aux,[P],Aux2),
+    	permutacionesAux(ListaNumeros,Pers,Aux2).
+
+permutacionesAux(_,[],_Aux).
+    
+
+palindromo([X],[X]).
+palindromo(L,P):-
+   	 	reversa(L,P),
+		L = P.
+
+palindromos(ListaElementos,ListaPalindromos):-
+    	permutaciones(ListaElementos,ListaPermutaciones),
+    	palindromosAux(ListaPermutaciones,ListaPalindromos).
+
+
+palindromosAux([Permutacion|Permutaciones],[LP|LPs]):-
+    	palindromo(Permutacion,LP),
+    	palindromosAux(Permutaciones,LPs).
+
+palindromosAux([Permutacion|Permutaciones],[LP|LPs]):-
+    	not(palindromo(Permutacion,LP)),
+    	palindromosAux(Permutaciones,[LP|LPs]).
+    	
+palindromosAux([],_Aux).
+    	
+    
+    
+    
+  
+%----------------------------------------------------------------
+
+
+%----------------------------------------------------------------
+
+%   LISTAS
+% Ejercicio 3
+% Listar Posiciones Elemento
+
+%Se le solicita que defina el predicado 
+%ocurrencias(Elemento, Lista, Posiciones). 
+%El primer argumento (Elemento) puede aparecer una o mas veces en Lista.
+% El tercer argumento (Posiciones) es
+%una lista de enteros que indican las posiciones en que ocurre Elemento en Lista
+
+posicion(Elemento,[Elemento|_Es],1).
+posicion(Elemento,[_X|Xs],P):-
+	posicion(Elemento,Xs,Ps),
+	P is (Ps + 1).
+
+
+%ocurrencias(Elemento,[Elemento],[1]).
+ocurrencias(Elemento,ListaNumeros,ListaPosiciones):-
+		ocurrenciasAux(Elemento,ListaNumeros,ListaPosiciones,[]).
+
+ocurrenciasAux(Elemento,ListaNumeros,[P|Ps],Aux):- 
+		posicion(Elemento,ListaNumeros,P),
+		not(member(P,Aux)),!,
+		append(Aux,[P],Aux2),
+		ocurrenciasAux(Elemento,ListaNumeros,Ps,Aux2).
+
+ocurrenciasAux(_Elem,_Lst,[],_Aux).
+
+
+%----------------------------------------------------------------
+
+%   BASE DE DATOS
+% Ejercicio 8
+% Campeonato de selecciones
+            

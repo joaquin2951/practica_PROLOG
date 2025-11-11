@@ -3,8 +3,8 @@ p(c).
 p(b).
 q([b,a]).
 q([a,c]).
-t(X,Y) :- p(X), q(L), ! , p(Y) , L = [Y,X|W].
-t(X,Y) :- not( t(Y,X) ).
+t(X,Y):- p(X), q(L), ! , p(Y) , L = [Y,X|W].
+t(X,Y):- not(t(Y,X)).
 
 not(X):- call(X),
   !,

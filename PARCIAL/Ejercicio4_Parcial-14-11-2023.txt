@@ -1,0 +1,107 @@
+%parcial 14/11/2023
+%ejercicio 4
+boleta(lista_1,candidato_a).
+boleta(lista_2,candidato_b).
+boleta(lista_3,candidato_c).
+
+distrito(caba).
+distrito(buenos_aires).
+distrito(santa_fe).
+distrito(cordoba).
+
+votos(caba,lista_1,230000).
+votos(caba,lista_2,200000).
+votos(caba,lista_3,10000).
+votos(buenos_aires,lista_1,150000).
+votos(buenos_aires,lista_2,120000).
+votos(santa_fe,lista_1,30000).
+votos(santa_fe,lista_2,60000).
+votos(cordoba,lista_1,30000).
+votos(cordoba,lista_2,70000).
+
+
+%a)
+lista_votos(LV):-
+    		lista_votos_aux(LV,[]).
+
+lista_votos_aux([[Distrito,Lista,NroVotos]|LVs],Aux):-
+    		votos(Distrito,Lista,NroVotos),
+    		not(member([Distrito,Lista,NroVotos],Aux)),!,
+    		append(Aux,[[Distrito,Lista,NroVotos]],Aux2),
+    		lista_votos_aux(LVs,Aux2).
+lista_votos_aux([],_).
+
+%b)
+suma_votos([[Distrito,_Lista,NroVotos]],Distrito,VD,Totales):-
+    	Totales = NroVotos,
+    	VD is NroVotos.
+suma_votos([[Dis,_Lista,NroVotos]],Distrito,VD,Totales):-
+    	Totales = NroVotos,
+    	not(Dis = Distrito),
+    	VD is 0.
+suma_votos([[Distrito,_Lista,NroVotos]|LVs],Distrito,VD,Total):-
+    	suma_votos(LVs,Distrito,VDs,Totals),
+    	VD is NroVotos + VDs,
+    	Total is Totals + NroVotos.
+suma_votos([[Dis,_Lista,NroVotos]|LVs],Distrito,VD,Total):-
+    	suma_votos(LVs,Distrito,VDs,Totals),
+    	not(Dis = Distrito),
+        VD is VDs,
+    	Total is (Totals + NroVotos).
+
+porcentaje_electores(Distrito,Porcentaje):-
+    	lista_votos(LV),
+    	suma_votos(LV,Distrito,VotosDistrito,VotosTotales),
+    	Porcentaje is (VotosDistrito/VotosTotales)*100.
+
+%c)
+
+votos_candidato([[_Distrito,Lista,NroVotos]],Candidato,VotosC):-
+    	boleta(Lista,Candidato),
+    	VotosC is NroVotos.
+votos_candidato([[_Distrito,Lista,_NroVotos]],Candidato,VotosC):-
+    	not(boleta(Lista,Candidato)),
+    	VotosC is 0.
+votos_candidato([[_Distrito,Lista,NroVotos]|LVs],Candidato,VotosC):-
+    	votos_candidato(LVs,Candidato,VotosCs),
+    	boleta(Lista,Candidato),
+    	VotosC is NroVotos+VotosCs.
+votos_candidato([[_Distrito,Lista,_NroVotos]|LVs],Candidato,VotosC):-
+    	votos_candidato(LVs,Candidato,VotosCs),
+    	not(boleta(Lista,Candidato)),
+    	VotosC is VotosCs.
+
+armarListaVotos_candidatos(LV,[[Candidato, VotosC]|LVCs],Aux):-
+    	votos_candidato(LV,Candidato,VotosC),
+    	not(member([Candidato, VotosC],Aux)),!,
+    	append(Aux,[[Candidato,VotosC]],Aux2),
+    	armarListaVotos_candidatos(LV,LVCs,Aux2).
+
+armarListaVotos_candidatos(_LV,[],_Aux).
+
+
+mayorDeLVC([[Candidato,VotosC]],Candidato,Mayor):- Mayor is VotosC.
+mayorDeLVC([[Cand,VotosC]|LVCs],Candidato,Mayor):-
+    	mayorDeLVC(LVCs,_Candidato2,Mayor2),
+    	VotosC >= Mayor2,
+    	Candidato is Cand,
+    	Mayor is VotosC.
+mayorDeLVC([[_Cand,VotosC]|LVCs],Candidato,Mayor):-
+    	mayorDeLVC(LVCs,Candidato2,Mayor2),
+    	VotosC < Mayor2,
+    	Candidato is Candidato2,
+    	Mayor is Mayor2.
+    	
+    	
+    	
+
+candidato_mas_votado(Candidato,Votos):-
+    	lista_votos(LV),
+    	armarListaVotos_candidatos(LV,LVC,[]),
+    	mayorDeLVC(LVC,Candidato,Votos).
+    	
+    	
+
+
+
+

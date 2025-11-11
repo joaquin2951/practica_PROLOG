@@ -1,0 +1,79 @@
+%EJERCICIo 3 a - PARCIAL 04/06/2024
+%arbol(Valor,AI,AD).
+%arbol(Valor,nil,nil).
+
+%ausentes(Arbol,Cantidades).
+
+izquierdosAusentes(nil,0).
+izquierdosAusentes(arbol(_,nil,nil),0).
+izquierdosAusentes(arbol(_,AI,AD),IA):-
+        AI = nil,
+    	not(AD = nil),
+    	izquierdosAusentes(AD,IA2),
+    	IA is IA2+1.
+izquierdosAusentes(arbol(_,AI,AD),IA):-
+        not(AI = nil),
+    	izquierdosAusentes(AD,IA2),
+    	izquierdosAusentes(AI,IA3),
+    	IA is IA2+IA3.
+
+derechosAusentes(nil,0).
+derechosAusentes(arbol(_,nil,nil),0).
+derechosAusentes(arbol(_,AI,AD),DA):-
+        AD = nil,
+        not(AI = nil),
+    	derechosAusentes(AI,DA2),
+    	DA is DA2+1.
+derechosAusentes(arbol(_,AI,AD),DA):-
+        not(AD = nil),
+    	derechosAusentes(AD,DA2),
+    	derechosAusentes(AI,DA3),
+    	DA is DA2+DA3.
+
+ausentes(Arbol,[IA,DA]):-
+    	izquierdosAusentes(Arbol,IA),
+    	derechosAusentes(Arbol,DA).
+
+
+
+
+%EJERCICIo 3 b - PARCIAL 04/06/2024
+
+%todas_las_ocurrencias(Arbol,Elementos,ListaOcurrencias)
+
+maximo_ausentes([Arbol],Maximo):-
+    	ausentes(Arbol,[AI,AD]),
+    	Maximo is AI+AD.
+
+maximo_ausentes([Arbol|Arboles],Maximo):-
+    	ausentes(Arbol,[AI,AD]),
+        Total is AI+AD,
+        maximo_ausentes(Arboles,Maximo),
+    	Total < Maximo.
+
+maximo_ausentes([Arbol|Arboles],Maximo):-
+    	ausentes(Arbol,[AI,AD]),
+        Maximo is AI+AD,
+        maximo_ausentes(Arboles,TotalAusentes),
+    	TotalAusentes =< Maximo.
+
+
+
+%EJERCICIo 3 c - PARCIAL 04/06/2024
+
+sin_ausentes(arbol(Valor,nil,nil),_Valor,arbol(Valor,nil,nil)).
+sin_ausentes(arbol(V,AI,AD),Valor,arbol(V,AI2,AD2)):-
+    	sin_ausentes(AI,Valor,AI2),
+    	sin_ausentes(AD,Valor,AD2).
+
+sin_ausentes(arbol(V,nil,AD),Valor,arbol(V,arbol(Valor,nil,nil),AD2)):-
+        not(AD = nil),
+    	sin_ausentes(AD,Valor,AD2).
+sin_ausentes(arbol(V,AI,nil),Valor,arbol(V,AI2,arbol(Valor,nil,nil))):-
+        not(AI = nil),
+    	sin_ausentes(AI,Valor,AI2).
+    	
+
+
+%ARBOL A=arbol(1,nil,arbol(2,nil,arbol(3,nil,nil)))
+%ARBOL B=arbol(1,arbol(2,nil,arbol(4,nil,nil)),arbol(3,arbol(5,nil,arbol(6,nil,nil)),nil))

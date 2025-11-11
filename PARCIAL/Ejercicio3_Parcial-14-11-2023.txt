@@ -1,0 +1,28 @@
+%EJERCICIo 3 a - PARCIAL 14/11/2023
+%arbol(Valor,AI,AD).
+%arbol(Valor,nil,nil).
+
+%ocurrencias(ArbolBin,C,N).
+ocurrencias(nil,_C,0).
+ocurrencias(arbol(C,AI,AD),C,N):-
+    	ocurrencias(AI,C,NI),
+    	ocurrencias(AD,C,ND),
+    	N is NI+ND+1.
+ocurrencias(arbol(Raiz,AI,AD),C,N):-
+    	not(Raiz is C),
+    	ocurrencias(AI,C,NI),
+    	ocurrencias(AD,C,ND),
+    	N is NI+ND.
+
+
+%EJERCICIo 3 b - PARCIAL 14/11/2023
+
+%todas_las_ocurrencias(Arbol,Elementos,ListaOcurrencias)
+
+todas_las_ocurrencias(Arbol,[Elemento],[Ocurrencia]):-
+    	ocurrencias(Arbol,Elemento,Ocurrencia).
+todas_las_ocurrencias(Arbol,[Elemento|Elementos],[Ocurrencia|Ocurrencias]):-
+    	ocurrencias(Arbol,Elemento,Ocurrencia),
+    	todas_las_ocurrencias(Arbol,Elementos,Ocurrencias).
+
+

@@ -1,0 +1,22 @@
+%EJERCICIo 3 a - PARCIAL 13/11/2023
+%arbol(Valor,AI,AD).
+%arbol(Valor,nil,nil).
+
+%cambiar(ArbolBinario,N1,N2,ArbolRespuesta).
+cambiar(nil,_,_,nil).
+cambiar(arbol(N1,AI,AD),N1,N2,arbol(N2,AI2,AD2)):-
+    	cambiar(AI,N1,N2,AI2),
+    	cambiar(AD,N1,N2,AD2).
+cambiar(arbol(Raiz,AI,AD),N1,N2,arbol(Raiz,AI2,AD2)):-
+    	not(Raiz is N1),
+    	cambiar(AI,N1,N2,AI2),
+    	cambiar(AD,N1,N2,AD2).
+
+%EJERCICIo 3 b - PARCIAL 13/11/2023
+
+%cambia_todos(Arbol1,Elementos,Arbol2).
+cambia_todos(Arbol1,[[N1,N2]],Arbol2):-
+    	cambiar(Arbol1,N1,N2,Arbol2).
+cambia_todos(Arbol1,[[N1,N2]|Ns],ArbolFinal):-
+    	cambiar(Arbol1,N1,N2,Arbol2),
+    	cambia_todos(Arbol2,Ns,ArbolFinal).

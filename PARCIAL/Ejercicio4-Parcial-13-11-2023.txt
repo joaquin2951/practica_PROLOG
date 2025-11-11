@@ -1,0 +1,63 @@
+%parcial 13/11/2023
+%ejercicio 4
+%a)
+propiedad(100,inmueble(departamento,2),barrio(centro),m2(86)).
+propiedad(101,inmueble(departamento,3),barrio(roma),m2(105)).
+propiedad(102,inmueble(departamento,1),barrio(sur),m2(61)).
+propiedad(103,inmueble(departamento,2),barrio(sur),m2(84)).
+propiedad(104,inmueble(casa,4),barrio(roma),m2(140)).
+propiedad(105,inmueble(casa,3),barrio(sur),m2(130)).
+propiedad(106,inmueble(departamento,1),barrio(centro),m2(56)).
+
+operacion(100,temporario,precio(70)).
+operacion(101,venta,precio(65000)).
+operacion(102,venta,precio(51000)).
+operacion(103,temporario,precio(90)).
+operacion(104,venta,precio(140000)).
+operacion(105,temporario,precio(100)).
+operacion(106,venta,precio(48000)).
+
+reserva(101, monto(1000)).
+reserva(104, monto(3000)).
+
+precio_m2(Referencia,Monto):-
+    	operacion(Referencia,venta,precio(P)),
+    	propiedad(Referencia,_,_,m2(M2)),
+    	Monto is P / M2.
+
+%b)
+	disponible(Referencia,Min,Max):-
+    	operacion(Referencia,_,precio(Precio)),
+    	not(reserva(Referencia,_)),
+    	Precio >= Min,
+    	Precio =< Max.
+
+%c)
+	%mayor_saldo(
+	saldoPropiedadReservada(Referencia,TipoPropiedad,Saldo,Operacion):-
+    	reserva(Referencia,monto(Monto)),
+    	operacion(Referencia,Operacion,precio(Precio)),
+    	propiedad(Referencia,inmueble(TipoPropiedad,_),_,_),
+    	Saldo is Precio - Monto.
+/*
+	listaSaldo(ListaSaldo):-
+    	armarListaSaldo(ListaSaldo,[]).
+	armarListaSaldo([
+	*/
+    	
+
+%d)
+	lista_departamentos(Lista,N):-
+    	lista_departamentos_aux(Lista,N,[]).
+
+	lista_departamentos_aux([Referencia|Rs],N,Aux):-
+    	propiedad(Referencia,inmueble(departamento,M),_,_),
+    	M >= N,
+    	not(member(Referencia,Aux)),!,
+    	append(Aux,[Referencia],Aux2),
+    	lista_departamentos_aux(Rs,N,Aux2).
+	lista_departamentos_aux([],_N,_Aux).
+
+
+
+    	
